@@ -23,7 +23,8 @@
 
 <script>
 import getUser from '../composables/getUser'
-import { useRouter } from 'vue-router'
+//import the route as well as the router
+import { useRouter, useRoute } from 'vue-router'
 import { watchEffect } from 'vue'
 // firebase imports
 import { auth } from '../firebase/config'
@@ -32,12 +33,15 @@ export default {
   setup() {
     const { user } = getUser()
     const router = useRouter()
+    //add route as a const in setup
+    const route = useRoute()
+
     const handleClick = () => {
       signOut(auth)
     }
     watchEffect(() => {
-      if (!user.value) {
-        router.push('/login')
+      if (!user.value && route.name !== 'Signup') {
+          router.push('/login')
       }
     })
     return { handleClick, user }
